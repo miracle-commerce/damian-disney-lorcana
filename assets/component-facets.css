@@ -1101,3 +1101,16 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
+
+
+/* Custom CSS by Miracle Commerce 5th-Aug-2023 */
+.filter-value-label{
+  display: flex; 
+  flex-wrap: wrap; 
+  align-items: center; 
+  column-gap: 10px;
+}
+.filter-value-label img{
+  width: 20px; 
+  height: auto;
+}

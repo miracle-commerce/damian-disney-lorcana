@@ -167,6 +167,7 @@
                             {%- for filter_order in filter_value_orders -%}
                               {%- for value in filter.values -%}
                                 {%- assign filter_value_handle = value.value | handle -%}
+                                {%- assign filter_value_image_name = filter_value_handle | append: '.png'-%}
                                 {%- if filter_value_handle == filter_order -%}
                                   <li class="list-menu__item facets__item{% if forloop.index > 10 and filter_type == 'vertical' %} show-more-item hidden{% endif %}">
                                     <label
@@ -212,7 +213,7 @@
                                           stroke-linejoin="round" />
                                       </svg>
 
-                                      <span aria-hidden="true">{{ value.label | escape }} ({{ value.count }})</span>
+                                      <span aria-hidden="true" class="filter-value-label"><img src="{{filter_value_image_name | file_img_url: '20x'}}" alt="{{value.label}}">{{ value.label | escape }} ({{ value.count }})</span>
                                       <span class="visually-hidden">
                                         {{- value.label | escape }} (
                                         {%- if value.count == 1 -%}
@@ -743,6 +744,7 @@
                               {%- for filter_order in filter_value_orders -%}
                                 {%- for value in filter.values -%}
                                   {%- assign filter_value_handle = value.value | handle -%}
+                                  {%- assign filter_value_image_name = filter_value_handle | append: '.png'-%}
                                   {%- if filter_value_handle == filter_order -%}
                                   <li class="mobile-facets__item list-menu__item">
                                     <label
@@ -787,7 +789,7 @@
                                         <path d="M1.5 3.5L2.83333 4.75L4.16667 6L9.5 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
                                       </svg>
     
-                                      <span aria-hidden="true">{{ value.label | escape }} ({{ value.count }})</span>
+                                      <span aria-hidden="true" class="filter-value-label"><img src="{{filter_value_image_name | file_img_url: '20x'}}" alt="{{value.label}}">{{ value.label | escape }} ({{ value.count }})</span>
                                       <span class="visually-hidden">
                                         {{- value.label | escape }} (
                                         {%- if value.count == '1' -%}
