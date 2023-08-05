@@ -1,0 +1,726 @@
+{%- if shop.metafields.multicartapp.button_text == blank -%}
+{%- assign button_text = 'Add to Cart' -%}
+{%- else -%}
+{%- assign button_text = shop.metafields.multicartapp.button_text -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.bar_position == blank -%}
+{%- assign bar_position = 'top_bottom' -%}
+{%- else -%}
+{%- assign bar_position = shop.metafields.multicartapp.bar_position -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.multicart_text == blank -%}
+{%- assign multicart_text = '' -%}
+{%- else -%}
+{%- assign multicart_text = shop.metafields.multicartapp.multicart_text -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.products_limit == blank -%}
+{%- assign products_limit = 10 -%}
+{%- else -%}
+{%- assign products_limit = shop.metafields.multicartapp.products_limit -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_lbl_val == blank -%}
+{%- assign show_lbl_val = "yes" -%}
+{%- else -%}
+{%- assign show_lbl_val = shop.metafields.multicartapp.show_lbl_val -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.new_label == blank -%}
+{%- assign new_label = "New" -%}
+{%- else -%}
+{%- assign new_label = shop.metafields.multicartapp.new_label -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.new_label_days == blank -%}
+{%- assign new_label_days =  24 | times: 3600 | times: 1 -%}
+{%- else -%}
+{%- assign new_label_days = 24 | times: 3600 | times: shop.metafields.multicartapp.new_label_days -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.sale_label == blank -%}
+{%- assign sale_label = "Sale" -%}
+{%- else -%}
+{%- assign sale_label = shop.metafields.multicartapp.sale_label -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.soldout_label == blank -%}
+{%- assign soldout_label = "Soldout" -%}
+{%- else -%}
+{%- assign soldout_label = shop.metafields.multicartapp.soldout_label -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.loadmoretext == blank -%}
+{%- assign loadmoretext = "Load More" -%}
+{%- else -%}
+{%- assign loadmoretext = shop.metafields.multicartapp.loadmoretext -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.disableflipper == blank -%}
+{%- assign disableflipper = "no" -%}
+{%- else -%}
+{%- assign disableflipper = shop.metafields.multicartapp.disableflipper -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_in_stock == blank -%}
+{%- assign show_in_stock = "yes" -%}
+{%- else -%}
+{%- assign show_in_stock = shop.metafields.multicartapp.show_in_stock -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_prd_image == blank -%}
+{%- assign show_prd_image = "yes" -%}
+{%- else -%}
+{%- assign show_prd_image = shop.metafields.multicartapp.show_prd_image -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_brand_sku == blank -%}
+{%- assign show_brand_sku = "yes" -%}
+{%- else -%}
+{%- assign show_brand_sku = shop.metafields.multicartapp.show_brand_sku -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_categories_sidebar == blank -%}
+{%- assign show_categories_sidebar = "yes" -%}
+{%- else -%}
+{%- assign show_categories_sidebar = shop.metafields.multicartapp.show_categories_sidebar -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_sort_by == blank -%}
+{%- assign show_sort_by = "yes" -%}
+{%- else -%}
+{%- assign show_sort_by = shop.metafields.multicartapp.show_sort_by -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.show_multicart_bar == blank -%}
+{%- assign show_multicart_bar = "yes" -%}
+{%- else -%}
+{%- assign show_multicart_bar = shop.metafields.multicartapp.show_multicart_bar -%}
+{%- endif -%}
+
+{%- if shop.metafields.multicartapp.preset_qty_val == blank -%}
+{%- assign preset_qty_val = 0 | plus: 0 -%}
+{%- else -%}
+{%- assign preset_qty_val = shop.metafields.multicartapp.preset_qty_val | plus: 0 -%}
+{%- endif -%}
+
+{%- assign curr_coll = collection.handle -%}
+
+{%- comment -%} Error Handling {%- endcomment -%}
+{%- capture sort_by_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.sort_by' }}{%- endcapture -%}
+{%- capture featured_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.featured' }}{%- endcapture -%}
+{%- capture price_low_to_high_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.price_low_to_high' }}{%- endcapture -%}
+{%- capture price_high_to_low_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.price_high_to_low' }}{%- endcapture -%}
+{%- capture alphabetically_a_to_z_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.alphabetically_a_to_z' }}{%- endcapture -%}
+{%- capture alphabetically_z_to_a_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.alphabetically_z_to_a' }}{%- endcapture -%}
+{%- capture date_new_to_old_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.date_new_to_old' }}{%- endcapture -%}
+{%- capture date_old_to_new_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.date_old_to_new' }}{%- endcapture -%}
+{%- capture best_selling_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.best_selling' }}{%- endcapture -%}
+{%- capture products_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.products_text' }}{%- endcapture -%}
+{%- capture product_image_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.product_image' }}{%- endcapture -%}
+{%- capture product_name_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.product_name' }}{%- endcapture -%}
+{%- capture brand_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.brand_text' }}{%- endcapture -%}
+{%- capture sku_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.sku_text' }}{%- endcapture -%}
+{%- capture price_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.price' }}{%- endcapture -%}
+{%- capture quantity_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.quantity' }}{%- endcapture -%}
+{%- capture show_options_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.show_options' }}{%- endcapture -%}
+{%- capture single_add_to_cart_button_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.single_add_to_cart_button_text' }}{%- endcapture -%}
+{%- capture close_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.close_text' }}{%- endcapture -%}
+{%- capture item_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.item_text' }}{%- endcapture -%}
+{%- capture items_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.items_text' }}{%- endcapture -%}
+{%- assign item_txt = 'cws_bulk_add_to_cart.item_text' | t | replace: item_error, 'Item' | strip_newlines -%}
+{%- assign items_txt = 'cws_bulk_add_to_cart.items_text' | t | replace: items_error, 'Items' | strip_newlines -%}
+{%- capture all_collection_page_title_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.all_collection_page_title' }}{%- endcapture -%}
+{%- capture no_items_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.no_items_text' }}{%- endcapture -%}
+{%- capture product_options_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.product_options' }}{%- endcapture -%}
+{%- capture categories_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.categories_text' }}{%- endcapture -%}
+
+<!-- error handling for ini -->
+{%- capture hide_options_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.hide_options' }}{%- endcapture -%}
+{%- capture max_stock_alert_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.max_stock_alert_text' }}{%- endcapture -%}
+{%- capture no_items_added_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.no_items_added_text' }}{%- endcapture -%}
+{%- capture add_more_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.add_more_text' }}{%- endcapture -%}
+{%- capture thank_you_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.thank_you_text' }}{%- endcapture -%}
+{%- capture cart_popup_title_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.cart_popup_title' }}{%- endcapture -%}
+{%- capture add_to_cart_error_message_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.add_to_cart_error_message' }}{%- endcapture -%}
+{%- capture adding_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.adding_text' }}{%- endcapture -%}
+{%- capture only_n_items_available_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.only_n_items_available' }}{%- endcapture -%}
+{%- capture too_many_items_in_cart_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.too_many_items_in_cart' }}{%- endcapture -%}
+{%- capture all_items_in_cart_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.all_items_in_cart' }}{%- endcapture -%}
+{%- capture view_more_categories_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.view_more_categories' }}{%- endcapture -%}
+{%- capture view_less_categories_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.view_less_categories' }}{%- endcapture -%}
+
+<!-- error handling for popup -->
+{%- capture view_cart_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.view_cart_text' }}{%- endcapture -%}
+{%- capture checkout_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.checkout_text' }}{%- endcapture -%}
+{%- capture continue_shopping_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.continue_shopping_text' }}{%- endcapture -%}
+{%- capture subtotal_text_error -%}{{ 'translation missing:' | append: ' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.subtotal_text' }}{%- endcapture -%}
+
+<!-- CART POPUP LABEL -->
+<script type="text/javascript">
+   var cart_popup_title = "{{ 'cws_bulk_add_to_cart.cart_popup_title' | t | replace: cart_popup_title_error, 'YOUR CART HAS %s ITEMS' | strip_newlines }}";
+   window.cart_popup_title = cart_popup_title.toString().split("%s");
+   window.cart_popup_title1 = window.cart_popup_title[0];
+   window.cart_popup_title2 = window.cart_popup_title[1];
+   window.view_more_category_text = "{{ 'cws_bulk_add_to_cart.view_more_categories' | t | replace: view_more_categories_error, 'View More Category' | strip_newlines }}";
+   window.view_less_category_text = "{{ 'cws_bulk_add_to_cart.view_less_categories' | t | replace: view_less_categories_error, 'View Less Category' | strip_newlines }}";
+   
+   window.show_options = "{{ 'cws_bulk_add_to_cart.show_options' | t | replace: show_options_error, 'Show Options' | strip_newlines }}";
+   window.hide_options = "{{ 'cws_bulk_add_to_cart.hide_options' | t | replace: hide_options_error, 'Hide Options' | strip_newlines }}";
+   var stock_max_alert = "{{ 'cws_bulk_add_to_cart.max_stock_alert_text' | t | replace: max_stock_alert_text_error, 'We have maximum %s items in stock.' | strip_newlines }} ";
+   window.stock_max_alert = stock_max_alert.toString().split("%s");
+   window.stock_max_alert1 = window.stock_max_alert[0];
+   window.stock_max_alert2 = window.stock_max_alert[1];
+   window.no_items_added_text = "{{ 'cws_bulk_add_to_cart.no_items_added_text' | t | replace: no_items_added_text_error, 'Sorry! no items added to cart, please enter Qty.' | strip_newlines }}";
+   window.single_atc_text = "{{ 'cws_bulk_add_to_cart.single_add_to_cart_button_text' | t | replace: single_add_to_cart_button_text_error, 'Add to Cart' | strip_newlines }}";
+   window.add_more_text = "{{ 'cws_bulk_add_to_cart.add_more_text' | t | replace: add_more_text_error, 'Add More...' | strip_newlines }}";
+   window.thank_you_text = "{{ 'cws_bulk_add_to_cart.thank_you_text' | t | replace: thank_you_text_error, 'Thank You...' | strip_newlines }}";
+   
+   window.add_to_cart_error_message = "{{ 'cws_bulk_add_to_cart.add_to_cart_error_message' | t | replace: add_to_cart_error_message_error, 'Below items, which were not successfully added to your Shopping Cart due to following errors.' | strip_newlines }}";
+  
+   //Set lang. specific cart response error messages - 786/ASK
+   window.only_n_items_available = "{{ 'cws_bulk_add_to_cart.only_n_items_available' | t | replace: only_n_items_available_error, 'You can only add %count %product_name to the cart.' | strip_newlines }}";
+   window.too_many_items_in_cart = "{{ "cws_bulk_add_to_cart.too_many_items_in_cart" | t | replace: too_many_items_in_cart_error, "You can't add more %product_name to the cart." | replace: '&#39;', "'" | strip_newlines }}";
+   window.all_items_in_cart = "{{ 'cws_bulk_add_to_cart.all_items_in_cart' | t | replace: all_items_in_cart_error, 'All %count %product_name are in your cart.' | strip_newlines }}";
+   var too_many_items_in_cart = window.too_many_items_in_cart.toString().split("%product_name");
+   var all_items_in_cart = window.all_items_in_cart.toString().split("%count %product_name");
+   var only_n_items_available = window.only_n_items_available.toString().split("%count %product_name");
+  
+   window.adding_text = "{{ 'cws_bulk_add_to_cart.adding_text' | t | replace: adding_text_error, 'Adding...' | strip_newlines }}";
+   window.item_txt = "{{ item_txt }}";
+   window.items_txt = "{{ items_txt }}";
+   
+   window.prd_img_txt = "{{ 'cws_bulk_add_to_cart.product_image' | t | replace: product_image_error, 'Product Image' | strip_newlines }}";
+   window.prd_name_txt = "{{ 'cws_bulk_add_to_cart.product_name' | t | replace: product_name_error, 'Product Name' | strip_newlines }}";
+   window.prd_brand_sku_txt = "{{ 'cws_bulk_add_to_cart.brand_text' | t | replace: brand_text_error, 'Brand' | strip_newlines }}/{{ 'cws_bulk_add_to_cart.sku_text' | t | replace: sku_text_error, 'SKU' | strip_newlines }}";
+   window.price_txt = "{{ 'cws_bulk_add_to_cart.price' | t | replace: price_error, 'Price' | strip_newlines }}";
+   window.qty_txt = "{{ 'cws_bulk_add_to_cart.quantity' | t | replace: quantity_error, 'Quantity' | strip_newlines }}";
+   window.prd_options_txt = "{{ 'cws_bulk_add_to_cart.product_options' | t | replace: product_options_error, 'Product Options' | strip_newlines }}";
+   window.prd_img_txt = "{{ 'cws_bulk_add_to_cart.product_image' | t | replace: product_image_error, 'Product Image' | strip_newlines }}";
+   window.prd_name_txt = "{{ 'cws_bulk_add_to_cart.product_name' | t | replace: product_name_error, 'Product Name' | strip_newlines }}"; 
+   window.price_txt = "{{ 'cws_bulk_add_to_cart.price' | t | replace: price_error, 'Price' | strip_newlines }}";
+   window.qty_txt = "{{ 'cws_bulk_add_to_cart.quantity' | t | replace: quantity_error, 'Quantity' | strip_newlines }}";
+   window.close_txt = "{{ 'cws_bulk_add_to_cart.close_text' | t | replace: close_text_error, 'Close' | strip_newlines }}";
+   window.view_cart_txt = "{{ 'cws_bulk_add_to_cart.view_cart_text' | t | replace: view_cart_text_error, 'View Cart' | strip_newlines }}";
+   window.checkout_txt = "{{ 'cws_bulk_add_to_cart.checkout_text' | t | replace: checkout_text_error, 'Checkout' | strip_newlines }}";
+   window.continue_shopping_txt = "{{ 'cws_bulk_add_to_cart.continue_shopping_text' | t | replace: continue_shopping_text_error, 'Continue shopping' | strip_newlines }}";
+   window.subtotal_txt = "{{ 'cws_bulk_add_to_cart.subtotal_text' | t | replace: subtotal_text_error, 'Subtotal' | strip_newlines }}";
+</script> 
+
+{%- comment -%} Get Multiadd to cart Collections {%- endcomment -%} 
+{%- assign coll_count = 0 -%}
+{%- capture colls_list -%}
+{%- for col in collections -%}
+{%- if col.template_suffix == "multiple-addtocart" -%}
+{%- assign coll_count = coll_count | plus: 1 -%}
+{{ col.handle }}
+{%- unless forloop.last -%},{%- endunless -%}
+{%- endif -%}
+{%- endfor -%}
+{%- endcapture -%}
+  
+{%- if collection.products_count > 0 -%}
+{%- paginate collection.products by products_limit -%}
+<div class="multicart-container">
+   <div class="multicart-loader" style="display: none;"><span class="cwsloader"></span></div>
+   <div class="page-width" id="collection-multicart">
+      {%- comment -%} Categories Sidebar {%- endcomment -%}
+      <div class="coll-header page-title" >
+        {%- if collection.handle != "all" -%}
+        <center><h2>{{ collection.title }}</h2></center>
+        {%- else -%}
+        <center><h2>{{ 'cws_bulk_add_to_cart.all_collection_page_title' | t | replace: all_collection_page_title_error, 'Products' | strip_newlines }}</h2></center>
+        {%- endif -%}
+      </div>
+     
+      {%- if collection.image != blank or collection.description != blank -%}
+      <div class="image-description">
+         {%- if collection.image != blank -%}
+         <div class="coll-img" >
+            <img src="{{ collection.image | img_url: 'medium' }}" />
+         </div>
+         {%- endif -%}
+         {%- if collection.description != blank -%}
+         <div class="coll-desc" >{{ collection.description }}</div>
+         {%- endif -%}  
+     </div>
+     {%- endif -%}  
+     
+     {%- if coll_count > 1 and show_categories_sidebar == "yes" -%}
+     <div class="widget-filter sidebar collection-filters sidebar_left">
+         <div class="block multicart-categories">
+            <h3 class="sub-title">{{ 'cws_bulk_add_to_cart.categories_text' | t | replace: categories_text_error, 'Categories' | strip_newlines }}</h3>
+            <div class="block-content" style="display:none;">
+               <ul class="sidebar-collections">
+                 {%- for collection in collections -%}
+                 {%- if colls_list contains collection.handle and collection.handle != curr_coll -%}
+                 <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+                 {%- endif -%}
+                 {%- endfor -%}
+               </ul>
+            </div>
+         </div>
+      </div>
+     {%- endif -%}
+     
+     <div class="{%- if coll_count > 1 and show_categories_sidebar == "yes" -%}collection-multicart-template{%- else -%}collection-multicart-fullwidth{%- endif -%}">
+        <div class="multicart_err" style="display:none;">
+         <button class="err_close" onclick="this.parentElement.style.display='none';" title="{{ 'cws_bulk_add_to_cart.close_text' | t | replace: close_text_error, 'Close' | strip_newlines }}">&times;</button>
+        </div>
+        <div class="product_list">
+         {%- if show_sort_by == "yes" -%}
+         <div class="multicart_sort filters-toolbar-wrapper">
+           <div class="cart_sort_by">
+            <span><strong>{{ 'cws_bulk_add_to_cart.sort_by' | t | replace: sort_by_error, 'Sort By' | strip_newlines }}:</strong></span>
+            <div class="sort_by_dropdown">
+            <select id="multicart_sort_by">
+               <option value="manual">{{ 'cws_bulk_add_to_cart.featured' | t | replace: featured_error, 'Featured' | strip_newlines }}</option>
+               <option value="price-ascending">{{ 'cws_bulk_add_to_cart.price_low_to_high' | t | replace: price_low_to_high_error, 'Price: Low to High' | strip_newlines }}</option>
+               <option value="price-descending">{{ 'cws_bulk_add_to_cart.price_high_to_low' | t | replace: price_high_to_low_error, 'Price: High to Low' | strip_newlines }}</option>
+               <option value="title-ascending">{{ 'cws_bulk_add_to_cart.alphabetically_a_to_z' | t | replace: alphabetically_a_to_z_error, 'Alphabetically, A-Z' | strip_newlines }}</option>
+               <option value="title-descending">{{ 'cws_bulk_add_to_cart.alphabetically_z_to_a' | t | replace: alphabetically_z_to_a_error, 'Alphabetically, Z-A' | strip_newlines }}</option>
+               <option value="created-ascending">{{ 'cws_bulk_add_to_cart.date_old_to_new' | t | replace: date_old_to_new_error, 'Oldest to Newest' | strip_newlines }}</option>
+               <option value="created-descending">{{ 'cws_bulk_add_to_cart.date_new_to_old' | t | replace: date_new_to_old_error, 'Newest to Oldest' | strip_newlines }}</option>
+               <option value="best-selling">{{ 'cws_bulk_add_to_cart.best_selling' | t | replace: best_selling_error, 'Best Selling' | strip_newlines }}</option>
+            </select>
+            </div>
+           </div>
+         </div>
+         {%- endif -%}
+         <div class="list-view-items">
+            <div id="list-view-items">
+               <div id="resp-table-caption">
+                  {%- comment -%} Multiple addtocart button is included here {%- endcomment -%}
+                  {%- if show_multicart_bar == "yes" and bar_position == 'top_bottom' or bar_position == 'top' -%}
+                  <div class="multiaddtocart">
+                     <h3 class="multicart-text">{{ multicart_text }}</h3>
+                     <button class="submit current_list-add-to-cart">
+                     <span>{{ button_text }}</span>
+                     </button>          
+                  </div>
+                  {%- endif -%}
+               </div>
+               <div class="multcart-container">
+                  <div class="multcart_total_cnt">
+                     <p><strong>{{ collection.all_products_count }} {{ 'cws_bulk_add_to_cart.products_text' | t | replace: products_text_error, 'Products' | strip_newlines }}</strong></p>
+                  </div>
+                  <table id="multi-addToCart" class="collection-multiaddtocart">
+                     <thead id="resp-table-header">
+                        <tr>
+                           {%- if show_prd_image == "yes" -%}<th class="cws_prd_img">{{ 'cws_bulk_add_to_cart.product_image' | t | replace: product_image_error, 'Product Image' | strip_newlines }}</th>{%- endif -%}
+                           <th class="cws_prd_name">{{ 'cws_bulk_add_to_cart.product_name' | t | replace: product_name_error, 'Product Name' | strip_newlines }}</th>
+                           {%- if show_brand_sku == "yes" -%}<th class="cws_brand_sku">{{ 'cws_bulk_add_to_cart.brand_text' | t | replace: brand_text_error, 'Brand' | strip_newlines }}/{{ 'cws_bulk_add_to_cart.sku_text' | t | replace: sku_text_error, 'SKU' | strip_newlines }}</th>{%- endif -%}
+                           <th class="cws_price">{{ 'cws_bulk_add_to_cart.price' | t | replace: price_error, 'Price' | strip_newlines }}</th>
+                           <th class="cws_prd_qty">{{ 'cws_bulk_add_to_cart.quantity' | t | replace: quantity_error, 'Quantity' | strip_newlines }}</th>
+                           <th></th>
+                        </tr>
+                     </thead>
+                     <tbody id="resp-table-body">
+                        {%- for product in collection.products -%}
+                        {%- comment -%} Multiple Addtocart App - Product Card Snippet {%- endcomment -%}
+
+                        {%- comment -%} Error Handling {%- endcomment -%}
+                        {%- capture soldout_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.soldout_text' }}{%- endcapture -%}
+                        {%- capture description_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.description' }}{%- endcapture -%}
+                        {%- capture from_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.from' }}{%- endcapture -%}
+                        {%- capture save_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.save_text' }}{%- endcapture -%}
+                        {%- capture in_stock_text_error -%}{{ 'translation missing:' | append:' ' | append: shop.locale | append: '.cws_bulk_add_to_cart.in_stock_text' }}{%- endcapture -%}
+
+                        {%- comment -%} On Sale - Badge {%- endcomment -%}
+                        {%- assign on_sale = false -%}
+                        {%- if product.compare_at_price_min > product.price_min -%}
+                        {%- assign on_sale = true -%}
+                        {%- endif -%}
+
+                        {%- comment -%} Soldout - Badge {%- endcomment -%}
+                        {%- assign sold_out = true -%}
+                        {%- if product.available  -%}
+                        {%- assign sold_out = false -%}
+                        {%- endif -%}
+
+                        {%- comment -%} New - Badge for 1 Day old Products {%- endcomment -%}
+                        {%- assign date_created = product.created_at | date:'%s' -%}
+                        {%- assign date_now = 'now' | date:'%s' -%}
+                        {%- assign difference = date_now | minus: date_created -%}
+
+                        {%- comment -%} Get Varaint Details {%- endcomment -%}
+                        {%- assign variant = product.variants.first -%}
+                        {%- assign variant_qty = product.variants.first.inventory_quantity -%}
+
+                        {%- if variant.inventory_management == 'shopify' and variant.inventory_policy != "continue" -%}
+                            {%- if variant_qty < 1 -%}
+                                {%- assign max = 0 -%}
+                                {%- assign stock_html = "" -%}
+                            {%- else -%}
+                                {%- assign max = variant_qty -%}
+                                {%- assign stock_html = 'cws_bulk_add_to_cart.in_stock_text' | t | replace: in_stock_text_error, 'In Stock' | strip_newlines | append:": " | append: max -%}
+                            {%- endif -%}    
+                        {%- else -%}
+                            {%- comment -%} When policy is "continue" then it wll allow to buy after out of stock {%- endcomment -%}
+                            {%- assign max = "" -%}
+							{%- assign stock_html = "" -%}
+                        {%- endif -%}
+
+                        <tr class="resp-table-row multicart product-{{ variant.id }}" data-product-id="{{ variant.id }}" id="product-{{ variant.id }}">
+                            {%- comment -%} 1. Product Image Column {%- endcomment -%}
+                            {%- if show_prd_image == "yes" -%}
+                            <td class="table-body-cell pro-imgcell cws_prd_img">
+                            <div class="list-view-item__image-column product-img"> 
+                            <div class="product-label"> 
+                                {%- if on_sale and show_lbl_val == "yes" -%}
+                                    <span class="badge-sale">{{ sale_label }}</span> 
+                                {%- else -%}
+                                    {%- if difference < new_label_days and sold_out == false and show_lbl_val == "yes" -%}
+                                    <span class="badge-new">{{ new_label }}</span>
+                                    {%- endif -%}
+                                {%- endif -%}
+                                {%- if sold_out and show_lbl_val == "yes" -%} 
+                                    <span class="badge-soldout">{{ soldout_label }}</span> 
+                                {%- endif -%} 
+                            </div>
+                            <a href="{{ product.url }}" class="list-view-item">
+                              
+                            {%- if product.images.size > 1 and disableflipper == "no" -%}
+                            <div class="reveal">        
+                                <img class="list-view-item__image" src="{{ product.featured_image.src | img_url: '90X90' }}" alt="{{ product.featured_image.alt | escape }}">
+                                <div class="hidden">
+                                <div class="caption">
+                                <div class="centered"><img class="hidden" src="{{ product.images[1] | img_url: '90X90' }}" alt="{{ product.images[1].alt | escape }}" /></div>
+                                </div>
+                                </div>
+                            </div>
+                            {%- else -%} 
+                              <img class="list-view-item__image" src="{{ product.featured_image.src | img_url: '90X90' }}" alt="{{ product.featured_image.alt | escape }}"> 
+                            {%- endif -%}  
+                            </a> 
+                            </div>
+                            </td>
+                            {%- endif -%}
+                          
+                            {%- comment -%} 2. Product Name Column {%- endcomment -%} 
+                            <td class="table-body-cell product-name cws_prd_name">
+                                <div class="pr_hndl" style="display:none;">{{ product.handle }}</div>
+                                <div class="list-view-item__title">
+                                  <a href="{{ product.url }}" class="var_title_{{ variant.id }}">{{ product.title }}</a>
+                                  <a href="{{ product.url }}" class="descBtn" data-toggle="tooltip" data-placement="left"><i class="icon" aria-hidden="true"></i> <span class="tooltip">{{ 'cws_bulk_add_to_cart.description' | t | replace: description_error, 'Description' | strip_newlines }}</span></a>
+                                </div>
+                            </td>
+                          
+                            {%- comment -%} 3. Brand / SKU Column {%- endcomment -%}
+                            {%- if show_brand_sku == "yes" -%}
+                            <td class="table-body-cell product-vendor cws_brand_sku">
+                                {%- comment -%} Brand {%- endcomment -%}
+                                {%- if product.vendor != blank -%}
+                                <p><b>{{ 'cws_bulk_add_to_cart.brand_text' | t | replace: brand_text_error, 'Brand' | strip_newlines }}:</b> {{ product.vendor }}</p>
+                                {%- endif -%}
+                             
+                                {%- comment -%} SKU {%- endcomment -%}
+                                {%- if product.selected_or_first_available_variant.sku != blank -%}
+                                <p><b>{{ 'cws_bulk_add_to_cart.sku_text' | t | replace: sku_text_error, 'SKU' | strip_newlines }}:</b> {{ product.selected_or_first_available_variant.sku }}</p>
+                                {%- endif -%}
+                            </td>
+                            {%- endif -%}
+                          
+                            {%- comment -%} 4. Price Column {%- endcomment -%}
+                            <td class="table-body-cell product-price cws_price">
+                            {%- assign compare_at_price = product.compare_at_price -%}
+                            {%- assign price = product.price -%}
+                            {%- assign price_varies = product.price_varies -%}
+                            {%- assign money_price = price | money -%}
+                            {%- assign min_price = product.price_min -%}
+                            {%- assign money_price_min = min_price | money -%}
+                              
+                            {%- if price_varies -%}
+                                <p>
+                                <span class="product-price__price">{{ 'cws_bulk_add_to_cart.from' | t | replace: from_error, 'From' | strip_newlines }} </span>
+                                <span class="money min_price">{{ money_price_min }}</span>
+                                </p>
+                            {%- else -%}
+                                <p>
+                                <span class="product-price__price single-price money"><b>{{ money_price }}</b></span>
+                                </p>
+                                {%- if product.has_only_default_variant -%}
+                                {%- if product.compare_at_price and product.compare_at_price > product.price -%}
+                                <p>
+                                <span class="money compare_price" style="text-decoration:line-through;"><b>{{ compare_at_price | money }}</b></span>
+                                </p>
+                                <p>
+                                <span class="label savings">{{ 'cws_bulk_add_to_cart.save_text' | t | replace: save_text_error, 'Save' | strip_newlines }} {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%</span>
+                                </p>
+                                {%- endif -%}
+                                {%- endif -%}
+                            {%- endif -%}
+                          </td>
+                          
+                          {%- if sold_out -%}
+                          {%- comment -%} 5. Qty Column {%- endcomment -%}
+                          <td class="table-body-cell product-qty cws_prd_qty"></td>
+                          
+                          {%- comment -%} 6. Action Column {%- endcomment -%}
+                          <td class="table-body-cell product-soldout">
+                          <span class="label soldout">{{ 'cws_bulk_add_to_cart.soldout_text' | t | replace: soldout_error, 'Soldout' | strip_newlines }}</span>
+                          </td>
+                          {%- else -%}
+                          {%- if product.variants.size > 1 -%} 
+                            
+                            {%- comment -%} 5. Qty Column {%- endcomment -%}
+                            <td class="table-body-cell product-qty cws_prd_qty"></td>
+                          
+                            {%- comment -%} 6. Action Column {%- endcomment -%}
+                            <td class="table-body-cell product-btn">
+                            <div class="qty-form">
+                                <input data-variantproid="variantof-{{ product.id }}" type="button" value="{{ 'cws_bulk_add_to_cart.show_options' | t | replace: show_options_error, 'Show Options' | strip_newlines }}" name="selectVariant" class="showhidevariant btn" style="cursor:pointer;"/>
+                            </div>
+                            </td>
+                            </tr>  
+
+                            {%- comment -%} Product Variants Listing Inner Table {%- endcomment -%}
+                            <tr class="variantof-{{ product.id }}" style="display:none;">
+                            <td class="show-product" colspan="6">
+                            <table id="resp-table" class="prd_variants">
+                                {%- capture option_titles -%}
+                                {%- for product_option in product.options_with_values -%}
+                                {{ product_option.name }} 
+                                {%- if forloop.last == false -%},{%- endif-%}
+                                {%- endfor -%}{%- endcapture -%}
+                                {%- assign option_titles = option_titles | split: ','-%}    
+                                {%- assign total_options = option_titles | size -%}
+                                <thead id="resp-table-header">
+                                <tr>
+                                    {%- if show_prd_image == "yes" -%}<th class="table-header-cell cws_prd_img">{{ 'cws_bulk_add_to_cart.product_image' | t | replace: product_image_error, 'Product Image' | strip_newlines }}</th>{%- endif -%}
+                                    {%- if total_options > 0 -%}<th class="table-header-cell cws_prd_options">{{ 'cws_bulk_add_to_cart.product_options' | t | replace: product_options_error, 'Product Options' | strip_newlines }}</th>{%- endif -%}
+                                    {%- if show_brand_sku == "yes" -%}<th class="table-header-cell cws_brand_sku">{{ 'cws_bulk_add_to_cart.brand_text' | t | replace: brand_text_error, 'Brand' | strip_newlines }}/{{ 'cws_bulk_add_to_cart.sku_text' | t | replace: sku_text_error, 'SKU' | strip_newlines }}</th>{%- endif -%}
+                                    <th class="table-header-cell cws_price">{{ 'cws_bulk_add_to_cart.price' | t | replace: price_error, 'Price' | strip_newlines }}</th>
+                                    <th class="table-header-cell cws_prd_qty">{{ 'cws_bulk_add_to_cart.quantity' | t | replace: quantity_error, 'Quantity' | strip_newlines }}</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {%- for variant in product.variants -%}
+                                    {%- assign variant_stock_html = "" -%}
+                                    {%- if variant.inventory_management == "shopify" -%}
+                                    {%- if variant.inventory_policy != "continue" -%}
+                                    {%- assign variant_max = variant.inventory_quantity -%}
+                                    {%- assign variant_stock_html = 'cws_bulk_add_to_cart.in_stock_text' | t | replace: in_stock_text_error, 'In Stock' | strip_newlines | append:": " | append: variant_max -%}
+                                    {%- else-%}
+                                    {%- assign variant_max = "" -%}
+                                    {%- endif -%}
+                                    {%- else -%}
+                                    {%- assign variant_max = "" -%}
+                                    {%- endif -%}
+                               
+                                    {%- comment -%} Product Variant Row {%- endcomment -%}
+                                    <tr class="resp-table-row prd_variant" data-variant-id="{{ variant.id }}" id="variant_{{ variant.id }}">
+                                      {%- comment -%} 1. Image Column {%- endcomment -%}
+                                      {%- if show_prd_image == "yes" -%}
+                                      <td class="table-body-cell product-img cws_prd_img">
+                                        <a href="{{ variant.url }}">
+                                        {%- if variant.image.src == blank -%}
+                                        <img src="{{ product.featured_image | img_url: '90X90' }}">
+                                        {%- else -%}
+                                        <img src="{{ variant.image.src | img_url: '90X90' }}">  
+                                        {%- endif -%}
+                                        </a>
+                                      </td>
+                                      {%- endif -%}
+                                      
+                                      {%- comment -%} 2. Variant Option-1,2,3 contains Column {%- endcomment -%}
+                                      {%- if total_options > 0 -%}
+                                      <td class="table-body-cell product-options cws_prd_options">
+                                      {%- if variant.option1 != blank -%}
+                                      <p class="product-option1">
+                                        <span class="option_title"><b>{{ option_titles[0] | strip | capitalize }}: </b></span> 
+                                        <span class="option_value">{{ variant.option1 | strip }}</span> 
+                                      </p>
+                                      {%- endif -%}
+                                    
+                                      {%- if variant.option2 != blank -%}
+                                      <p class="product-option2">
+                                        <span class="option_title"><b>{{option_titles[1] | strip | capitalize }}: </b></span> 
+                                        <span class="option_value">{{ variant.option2 | strip  }}</span> 
+                                      </p>
+                                      {%- endif -%}
+                                     
+                                      {%- if variant.option3 != blank -%} 
+                                      <p class="product-option3">
+                                        <span class="option_title"><b>{{ option_titles[2] | strip | capitalize }}: </b></span> 
+                                        <span class="option_value">{{ variant.option3 | strip }}</span> 
+                                      </p>
+                                      {%- endif -%}
+                                      </td>
+                                      {%- endif -%}
+                                     
+                                      {%- comment -%} 5. Brand/SKU Column {%- endcomment -%}
+                                      {%- if show_brand_sku == "yes" -%}
+                                      <td class="table-body-cell product-vendor cws_brand_sku">
+                                        {%- if product.vendor != blank -%}
+                                        <p><b>{{ 'cws_bulk_add_to_cart.brand_text' | t | replace: brand_text_error, 'Brand' | strip_newlines }}:</b> {{ product.vendor }}</p>
+                                        {%- endif -%}
+                             
+                                        {%- if variant.sku != blank -%}
+                                        <p><b>{{ 'cws_bulk_add_to_cart.sku_text' | t | replace: sku_text_error, 'SKU' | strip_newlines }}:</b> {{ variant.sku }}</p>
+                                        {%- endif -%}
+                                       </td>
+                                      {%- endif -%}
+                                      
+                                       {%- comment -%} 6.Price Column {%- endcomment -%}
+                                       <td class="table-body-cell product-price cws_price">
+                                        {%- if variant.compare_at_price > variant.price -%}
+                                        <p>
+                                          <span class="money price"><b>{{ variant.price | money }}</b></span>
+                                          <span style="text-decoration:line-through;" class="money compare_price"><b>{{ variant.compare_at_price | money }}</b></span>
+                                        </p>
+                                        <p><span class="label savings">{{ 'cws_bulk_add_to_cart.save_text' | t | replace: save_text_error, 'Save' | strip_newlines }} {{ variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round }}%</span></p>
+                                        {%- else -%}
+                                        <p><b><span class="money">{{ variant.price | money }}</span></b></p>
+                                        {%- endif -%}
+                                       </td>
+                                      
+                                       {%- comment -%} 7.Qty Column {%- endcomment -%}
+                                       {%- if variant.available -%}
+                                       <td class="table-body-cell product-qty cws_prd_qty">  
+                                       <div class="qty-box clearfix">
+                                            <input style="cursor:pointer;" id="qtyminus-{{ variant.id }}" class="qtyminus" type="button" value="-">
+                                            <input id="updates_{{ variant.id }}" class="list-product-qty currqty_{{ variant.id  }}" type="text" value="{{ preset_qty_val }}" name="updates[]" size="4" max="{{ variant_max }}" onkeyup="this.value = this.value.replace(/[^0-9]/g,&quot;&quot;)">
+                                            <input style="cursor:pointer;" id="qtyplus-{{ variant.id }}" class="qtyplus" type="button" value="+">
+                                        </div>
+                                        <div>{%- if show_in_stock == "yes" -%}{{ variant_stock_html }}{%- endif -%}</div>   
+                                        </td>
+                                       {%- else -%}
+                                       <td class="table-body-cell product-qty cws_prd_qty"></td>
+                                       {%- endif -%}
+                                      
+                                       {%- comment -%} 8.Action Column {%- endcomment -%}
+                                       {%- if variant.available -%}
+                                       <td class="table-body-cell product-btn">
+                                            <div class="qty-form">
+                                            <form method="post" action="/cart/add" class="AddToCart">           
+                                                <input type="hidden" name="id" value="{{ variant.id }}" />
+                                                <button type="button" value="Buy now" id="{{ variant.id }}" class="btn singleCart">
+                                                <span>{{ 'cws_bulk_add_to_cart.single_add_to_cart_button_text' | t | replace: single_add_to_cart_button_text_error, 'Add to Cart' | strip_newlines }}</span> 
+                                                </button>
+                                            </form>
+                                           </div>
+                                        </td>
+                                       {%- else -%}
+                                       <td class="table-body-cell product-soldout">
+                                        <span class="label soldout">{{ 'cws_bulk_add_to_cart.soldout_text' | t | replace: soldout_error, 'Soldout' | strip_newlines }}</span>
+                                      </td>
+                                      {%- endif -%}
+                                    </tr>
+                                    {%- endfor -%}
+                              </tbody>
+                             </table>
+                             </td>
+                             </tr>
+                             {%- else -%}
+                             {%- comment -%} 5. Qty Column {%- endcomment -%}
+                             <td class="table-body-cell product-qty cws_prd_qty">
+                                <div class="qty-box clearfix">
+                                <input style="cursor:pointer;" id="qtyminus-{{ product.id }}" class="qtyminus" type="button" value="-">
+                                <input id="updates_{{ product.variants.first.id  }}" class="list-product-qty currqty_{{ product.variants.first.id  }}" type="text" value="{{ preset_qty_val }}" name="updates[]" size="4" max="{{ max }}" onkeyup="this.value = this.value.replace(/[^0-9]/g,&quot;&quot;)">
+                                <input style="cursor:pointer;" id="qtyplus-{{ product.id }}" class="qtyplus" type="button" value="+">
+                                </div>
+                                <div class="qty-stock">{%- if show_in_stock == "yes" -%}{{ stock_html }}{%- endif -%}</div>
+                             </td>
+                             {%- comment -%} 6. Action Column {%- endcomment -%}
+                             <td class="table-body-cell product-btn">
+                                <div class="qty-form">
+                                <form method="post" action="/cart/add" class="AddToCart">           
+                                    <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+                                    <button type="button" value="Buy now" id="{{ variant.id }}" class="btn singleCart">
+                                    <span>{{ 'cws_bulk_add_to_cart.single_add_to_cart_button_text' | t | replace: single_add_to_cart_button_text_error, 'Add to Cart' | strip_newlines }}</span> 
+                                    </button>
+                                </form>
+                               </div>
+                             </td>
+                          {%- endif -%}
+                          {%- endif -%}
+                        </tr>
+                        {%- endfor -%}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      {%- comment -%} Load More {%- endcomment -%}
+      {%- if paginate.next -%}
+      <div id="product-list-foot" align="center">
+         <div class="multcart_more">
+            {%- if autoloadmore == "yes" -%}
+            &darr; More <a href="{{ paginate.next.url }}" style="display:none;">More</a>
+            {%- else -%}
+            <a href="{{ paginate.next.url }}" class="btn">{{ loadmoretext }}</a>
+            {%- endif -%}
+         </div>
+      </div>
+      {%- endif -%}
+      {%- comment -%} Multiple addtocart button is included here {%- endcomment -%}
+      {%- if show_multicart_bar == "yes" and bar_position == 'top_bottom' or bar_position == 'bottom' -%}
+      <div class="multiaddtocart">
+         <h3 class="multicart-text">{{ multicart_text }}</h3>
+         <button class="submit current_list-add-to-cart">
+         <span>{{ button_text }}</span>
+         </button>       
+      </div>
+      {%- endif -%}
+      <a itle="Shopping Cart" id="flyToCart" class="cart_anchor" href="/cart">
+         <div id="multicartDiv" class="multi-items-cart">{{ cart.item_count }} {{ cart.item_count | pluralize: item_txt, items_txt | strip_newlines }}</div>
+      </a>
+     </div>
+   </div>
+</div>
+{%- endpaginate -%}
+{%- else -%}
+{%- comment -%} No Products Found {%- endcomment -%}
+<div class="multicart-container">
+   <div class="page-width" id="collection-multicart">
+      <div class="coll-header page-title" >
+        {%- if collection.handle != "all" -%}
+        <center><h2>{{ collection.title }}</h2></center>
+        {%- else -%}
+        <center><h2>{{ 'cws_bulk_add_to_cart.all_collection_page_title' | t | replace: all_collection_page_title_error, 'Products' | strip_newlines }}</h2></center>
+        {%- endif -%}
+      </div>
+     
+      {%- if collection.image != blank or collection.description != blank -%}
+      <div class="image-description">
+         {%- if collection.image != blank -%}
+         <div class="coll-img" >
+            <img src="{{ collection.image | img_url: 'medium' }}" />
+         </div>
+         {%- endif -%}
+         {%- if collection.description != blank -%}
+         <div class="coll-desc" >{{ collection.description }}</div>
+         {%- endif -%}  
+      </div>
+      {%- endif -%}
+    
+      {%- if coll_count > 1 and show_categories_sidebar == "yes" -%}
+      <div class="widget-filter sidebar collection-filters sidebar_left">
+         <div class="block multicart-categories">
+            <h3 class="sub-title">{{ 'cws_bulk_add_to_cart.categories_text' | t | replace: categories_text_error, 'Categories' | strip_newlines }}</h3>
+            <div class="block-content" style="display:none;">
+               <ul class="sidebar-collections">
+                 {%- for collection in collections -%}
+                 {%- if colls_list contains collection.handle and collection.handle != curr_coll -%}
+                 <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+                 {%- endif -%}
+                 {%- endfor -%}
+               </ul>
+            </div>
+         </div>
+      </div>
+     {%- endif -%}
+     
+     <div class="{%- if coll_count > 1 and show_categories_sidebar == "yes" -%}collection-multicart-template{%- else -%}collection-multicart-fullwidth{%- endif -%}">
+       <div class="grid__item small-text-center">
+         <p class="text-center no-products">{{ 'cws_bulk_add_to_cart.no_items_text' | t | replace: no_items_text_error, 'Sorry, There are no Products in this Collection.' | strip_newlines }}</p>
+       </div>
+     </div>
+   </div>
+</div>
+{%- endif -%}

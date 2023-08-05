@@ -1,0 +1,106 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "79ddc74d-7e43-484f-861b-f7bac74d3df0": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Leebarbs",
+            "heading_size": "h1"
+          }
+        },
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>This Emerald Steel Midrange deck was created by Leebarbs, host of the Uncommon Cardboard Podcast.<\/p>",
+            "text_style": "body"
+          }
+        },
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-button-1": {
+          "type": "button",
+          "settings": {
+            "button_label": "Buy the Deck",
+            "button_link": "shopify:\/\/collections\/leebarbs-uncommon-cardboard"
+          }
+        }
+      },
+      "block_order": [
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-heading-1",
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-text-1",
+        "template--19500231033107__79ddc74d-7e43-484f-861b-f7bac74d3df0-button-1"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/Leebarbs.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "37759841-b550-4e80-8ac5-3c0ee15dc1e3": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Dan Uebel",
+            "heading_size": "h1"
+          }
+        },
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>This Amber\/Amethyst Combo Deck deck was created by Dan Uebel and is currently the most popular deck on https:\/\/dreamborn.ink\/<\/p>",
+            "text_style": "body"
+          }
+        },
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-button-1": {
+          "type": "button",
+          "settings": {
+            "button_label": "Buy the Deck",
+            "button_link": "shopify:\/\/collections\/amber-amethyst-combo-deck"
+          }
+        }
+      },
+      "block_order": [
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-heading-1",
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-text-1",
+        "template--19500231033107__37759841-b550-4e80-8ac5-3c0ee15dc1e3-button-1"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/Amber_Amethyst_Combo_Deck.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "79ddc74d-7e43-484f-861b-f7bac74d3df0",
+    "37759841-b550-4e80-8ac5-3c0ee15dc1e3"
+  ]
+}
