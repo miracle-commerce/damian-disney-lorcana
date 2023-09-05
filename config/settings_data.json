@@ -1,8 +1,8 @@
 {
   "current": {
-    "logo": "shopify:\/\/shop_images\/Lorcana_Store_Logo_2.png",
-    "logo_width": 70,
-    "favicon": "shopify:\/\/shop_images\/Lorcana_Store_Logo_3.png",
+    "logo": "shopify:\/\/shop_images\/lorcana_store_final-01.png",
+    "logo_width": 190,
+    "favicon": "shopify:\/\/shop_images\/lorcana-03.png",
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
     "type_body_font": "assistant_n4",
@@ -102,7 +102,7 @@
     "brand_description": "<p><\/p>",
     "brand_image_width": 100,
     "social_facebook_link": "",
-    "social_instagram_link": "",
+    "social_instagram_link": "https:\/\/www.instagram.com\/lorcana_store\/",
     "social_youtube_link": "",
     "social_tiktok_link": "",
     "social_twitter_link": "",

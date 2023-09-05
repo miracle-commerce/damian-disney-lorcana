@@ -4,10 +4,17 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "disabled": true,
       "blocks": {
         "announcement-bar-0": {
           "type": "announcement",
+          "settings": {
+            "text": "Join us on Twitch",
+            "link": "https:\/\/www.twitch.tv\/aetrox"
+          }
+        },
+        "9ecf96d1-0cd4-4ece-82ba-f3f2dea8a642": {
+          "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "Welcome to our store",
             "link": ""
@@ -15,7 +22,8 @@
         }
       },
       "block_order": [
-        "announcement-bar-0"
+        "announcement-bar-0",
+        "9ecf96d1-0cd4-4ece-82ba-f3f2dea8a642"
       ],
       "settings": {
         "color_scheme": "background-1",
