@@ -9,7 +9,7 @@
       <div class="MainDeckBuilder__left-side MaindeckBuilder__Panel" data-card-panel>
         <div class="DeckBuilder__Cards" data-cards-selector>
           {%- for product in collection.products -%}
-            {% comment %} Main Card Params {% endcomment %}
+            {% comment %} Start getting card's category based on the category metafield's value {% endcomment %}
             {% assign current_variant = product.variants[0] %}
             {%- if product.metafields.custom.category.value -%}
               {%- if card_categories == blank -%}
@@ -18,13 +18,17 @@
                 {%- assign card_categories = card_categories | append: product.metafields.custom.category.value | append: ',' -%}
               {%- endif -%}
             {%- endif -%}
+            {% comment %} End {% endcomment %}
 
+            {% comment %} Start getting card limit for deck {% endcomment %}
             {%- if current_variant.inventory_management == nil or current_variant.inventory_quantity > 4 -%}
               {% assign qty_limit = 4 %}
             {% else %}
                {% assign qty_limit = current_variant.inventory_quantity %}
             {%- endif -%}
+            {% comment %} End {% endcomment %}
 
+            {% comment %} Start getting item background and border color based on ink color metafield's value {% endcomment %}
             {%- assign has_inkColor = false -%}
             {%- if product.metafields.custom.ink_color.value != blank -%}
               {%- assign has_inkColor = true -%}
@@ -50,11 +54,28 @@
                   {%- assign deckItemBorderColor = '#7d8c96' -%}
               {%- endcase -%}                     
             {%- endif -%}
+            {% comment %} End {% endcomment %}
 
+            {% comment %} Start checking if card is inkable or not based on inkable metafield's value {% endcomment %}
             {%- assign inkable = false -%}
             {%- if product.metafields.custom.inkable.value == true -%}
               {%- assign inkable = true -%}
             {%- endif -%}
+            {% comment %} End {% endcomment %}
+
+            {% comment %} Start getting card's require number for deck based on the "Deck Require Numbers" metafield's value {% endcomment %}
+            {%- assign deck_require_number = false -%}
+            {%- if product.metafields.custom.deck_require_numbers -%}
+              {%- for deck_require_number_data in product.metafields.custom.deck_require_numbers.value -%}
+                {%- assign data_collection = collections[deck_require_number_data.collection] -%}
+                {%- if data_collection == collection -%}
+                  {%- assign deck_require_number = deck_require_number_data.require_number -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {% comment %} End {% endcomment %}
+
 
             <deck-card-item class="DeckBuilderCard" 
               data-variant-id="{{current_variant.id}}" data-card-quantity="0"
@@ -62,6 +83,7 @@
               data-category = "{{- product.metafields.custom.category.value -}}"
               data-inkColor="{{deckItemBackground}}"
               data-price = "{{current_variant.price}}"
+              data-require-number = "{{deck_require_number}}"
             >
               <div class="DeckBuilderCard__image">
                 <a href="{{product.url}}" title="{{product.title}}">
@@ -114,7 +136,7 @@
                       </span>
                     {%- endif -%}
   
-                    {%- if product.metafields.custom.deck_require_number.value -%}
+                    {%- if deck_require_number -%}
                       <span class="DeckItem__requireNumberWrapper {% if inkable %} inkable{% else %} no-inkable{% endif %}">
                         <span class="inkable__icon">
                           {%- if inkable -%}
@@ -123,7 +145,7 @@
                             {%- render 'icon-inkwell' -%}
                           {%- endif -%}
                         </span>
-                        <span class="requireNumber">{{product.metafields.custom.deck_require_number.value}}</span>
+                        <span class="requireNumber">{{deck_require_number}}</span>
                       </span>
                     {%- endif -%}
                   </div>
