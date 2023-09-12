@@ -1,0 +1,216 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'template-deck-builder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'deck-builder.js' | asset_url }}" defer="defer"></script>
+
+<section class="main-deck-builder">
+  {% paginate collection.products by collection.all_products_count %}
+    {% assign card_categories = '' %}
+    <div class="deck-builder__wrapper">
+      <div class="MainDeckBuilder__left-side MaindeckBuilder__Panel" data-card-panel>
+        <div class="DeckBuilder__Cards" data-cards-selector>
+          {%- for product in collection.products -%}
+            {% comment %} Main Card Params {% endcomment %}
+            {% assign current_variant = product.variants[0] %}
+            {%- if product.metafields.custom.category.value -%}
+              {%- if card_categories == blank -%}
+                {%- assign card_categories = product.metafields.custom.category.value | append: ','-%}
+              {%- else -%}
+                {%- assign card_categories = card_categories | append: product.metafields.custom.category.value | append: ',' -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if current_variant.inventory_management == nil or current_variant.inventory_quantity > 4 -%}
+              {% assign qty_limit = 4 %}
+            {% else %}
+               {% assign qty_limit = current_variant.inventory_quantity %}
+            {%- endif -%}
+
+            {%- assign has_inkColor = false -%}
+            {%- if product.metafields.custom.ink_color.value != blank -%}
+              {%- assign has_inkColor = true -%}
+              {%- assign ink_color_handle = product.metafields.custom.ink_color.value | handle -%}
+              {%- case ink_color_handle -%}
+                {%- when 'amber' -%}
+                  {%- assign deckItemBackground = "#672900" -%}
+                  {%- assign deckItemBorderColor = '#de9922' -%}
+                {%- when 'amethyst' -%}
+                  {%- assign deckItemBackground = '#2e002b' -%}
+                  {%- assign deckItemBorderColor = '#64296b' -%}
+                {%- when 'emerald' -%}
+                  {%- assign deckItemBackground = '#003f11' -%}
+                  {%- assign deckItemBorderColor = '#289345' -%}
+                {%- when 'ruby' -%}
+                  {%- assign deckItemBackground = '#580303' -%}
+                  {%- assign deckItemBorderColor = '#c31d2b' -%}
+                {%- when 'sapphire' -%}
+                  {%- assign deckItemBackground = '#003a55' -%}
+                  {%- assign deckItemBorderColor = '#0096c7' -%}
+                {%- when 'steel' -%}
+                  {%- assign deckItemBackground = '#313f47' -%}
+                  {%- assign deckItemBorderColor = '#7d8c96' -%}
+              {%- endcase -%}                     
+            {%- endif -%}
+
+            {%- assign inkable = false -%}
+            {%- if product.metafields.custom.inkable.value == true -%}
+              {%- assign inkable = true -%}
+            {%- endif -%}
+
+            <deck-card-item class="DeckBuilderCard" 
+              data-variant-id="{{current_variant.id}}" data-card-quantity="0"
+              data-card-limit = "{{qty_limit}}"
+              data-category = "{{- product.metafields.custom.category.value -}}"
+              data-inkColor="{{deckItemBackground}}"
+              data-price = "{{current_variant.price}}"
+            >
+              <div class="DeckBuilderCard__image">
+                <a href="{{product.url}}" title="{{product.title}}">
+                  {{ product | image_url: width: 450, height: auto | image_tag}}
+                </a>
+                <a href="{{product.url}}" class="DeckCard__price" data-card-price>
+                  {{current_variant.price | money }}
+                  {% comment %} {% render 'icon-go' %} {% endcomment %}
+                </a>
+              </div>
+              <div class="DeckBuilderCard__Bottom">
+                <div class="DeckBuilderCard__qty-selector" data-qty-controller>
+                  <span class="qty--decrease qty-control-icon disabled" data-qty-decrease>
+                    {% render 'icon-minus' %}
+                  </span>
+                  <span class="qty-value"><span class="real-value" data-qty-value>0</span>/<span data-qty-limit-el>{{qty_limit}}</span></span>
+                  <span class="qty--increase qty-control-icon" data-qty-increase>
+                    {% render 'icon-plus' %} 
+                  </span>
+                </div>
+              </div>
+
+              <template data-deckItem-template>
+                <div class="DeckItem" 
+                  data-item-id="{{current_variant.id}}"
+                  data-ink-color="{{ink_color_handle}}"
+                  data-card-quantity = "0"
+                  data-deck-item
+
+                  {% if has_inkColor %}
+                  style="--item-background: {{deckItemBackground}}; --item-border-color: {{deckItemBorderColor}}"
+                  {% endif %}>
+                  <div class="DeckItem__heading">
+                    {%- if has_inkColor -%}
+                      <span class="DeckItem__colorIcon">
+                        {%- case ink_color_handle -%}
+                          {%- when 'amber' -%}
+                            {%- render 'icon-amber' -%}
+                          {%- when 'amethyst' -%}
+                            {%- render 'icon-amethyst' -%}
+                          {%- when 'emerald' -%}
+                            {% render 'icon-emerald' %}
+                          {%- when 'ruby' -%}
+                            {% render 'icon-ruby' %}
+                          {%- when 'sapphire' -%}
+                            {% render 'icon-sapphire' %}
+                          {%- when 'steel' -%}
+                            {% render 'icon-stell' %}
+                        {%- endcase -%}                     
+                      </span>
+                    {%- endif -%}
+  
+                    {%- if product.metafields.custom.deck_require_number.value -%}
+                      <span class="DeckItem__requireNumberWrapper {% if inkable %} inkable{% else %} no-inkable{% endif %}">
+                        <span class="inkable__icon">
+                          {%- if inkable -%}
+                            {%- render 'icon-inkcost' -%}
+                          {%- else -%}
+                            {%- render 'icon-inkwell' -%}
+                          {%- endif -%}
+                        </span>
+                        <span class="requireNumber">{{product.metafields.custom.deck_require_number.value}}</span>
+                      </span>
+                    {%- endif -%}
+                  </div>
+                  <a href="{{product.url}}" class="DeckItem__Title" title="{{product.title}}">{{product.title}}
+                  </a>
+                  <a href="{{product.url}}" class="DeckCard__price" data-card-price>
+                    {{current_variant.price | money }}
+                    {% comment %} {% render 'icon-go' %} {% endcomment %}
+                  </a>
+                  <div class="DeckItem__quantity">
+                    <span class="DeckItemQty__control DeckItemQty__control--minus" data-deck-item-qty-decrease>{% render 'icon-minus' %}</span>
+                    <span class="DeckItemQty__value" data-deck-item-quantity>0</span>
+                    <span class="DeckItemQty__control DeckItemQty__control--plus" data-deck-item-qty-increase>{% render 'icon-plus' %}</span>
+                  </div>
+                </div>
+              </template>
+
+            </deck-card-item>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="MainDeckBuilder__right-side MaindeckBuilder__Panel mobile-hidden" data-deck-panel>
+        <div class="deck__heading">
+          <h3 class="deck__title">Your Deck</h3>
+          <span class="deck__count">
+            <span class="deckIcon">{% render 'icon-deck' %}</span>
+            <span class="deck__item-count" data-deck-items-total-count>0</span>
+          </span>
+          <span class="DeckTotalPrice"><span class="DeckTotalPrice__label">Total:</span> <span data-deck-total-price>0</span></span>
+        </div>
+        <div class="deck-items__wrapper" data-deck-items-wrapper>
+          {% assign card_categories = card_categories | split: ',' | uniq | sort %}
+          {%- for category in card_categories -%}
+            <div class="deck-items__category disabled" data-deck-category = "{{category}}">
+              <h4 class="deck-items__category__title">
+                {%- case category -%}
+                  {%- when 'Character' -%}
+                    Characters
+                  {%- when 'Action' -%}
+                    Actions
+                  {%- when 'Song' -%}
+                    Songs
+                  {%- when 'Item' -%}
+                    Items
+                  {% else %}
+                    {{category}}
+                {% endcase %}
+                (<span class="CategoryItems__count" data-category-items-count>0</span>)
+              </h4>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="DeckBuilderBottom">
+        <div class="AddDeckCartButton__wrapper">
+          <a href="javascript:void(0)" class="AddDeckCartButton button button--primary disabled" data-add-deck-cart>
+            <span class="deck-add-button-label">
+              Add Your Deck To Cart
+            </span>
+            <span class="deck-add-button-loading">
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                class="spinner"
+                viewBox="0 0 66 66"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+            </span>
+          </a>
+        </div>
+        <div class="deckPanel__switch--wrapper">
+          <a href="javascript:void(0)" class="deckPanel__switch button button--primary" data-deck-panel-switch="card">Cards</a>
+          <a href="javascript:void(0)" class="deckPanel__switch button button--primary" data-deck-panel-switch="deck">Deck</a>
+        </div>
+      </div>
+    </div>
+  {% endpaginate %}
+</section>
+{% schema %}
+  {
+    "name":"Deck builder", 
+    "presets":[
+      {
+        "name":"Main Deck Builder"
+      }
+    ]
+  }
+{% endschema %}

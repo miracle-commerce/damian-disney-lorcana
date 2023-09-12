@@ -1,0 +1,8 @@
+{
+    "sections":{
+        "deck-builder-main":{
+            "type":"main-collection-deck-builder"
+        }
+    }, 
+    "order":["deck-builder-main"]
+}
